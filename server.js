@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const config = require("config");
 const db_URI = config.get("mongoURI");
 
+//Routes
+const Habits = require("./routes/Habits");
+
 //connect with mongodb
 mongoose
   .connect(db_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -23,6 +26,9 @@ app.use(function (req, res, next) {
   );
   next();
 });
+
+//redirect routes to route folder
+app.use("/api/saveHabit", Habits);
 
 const port = process.env.PORT || 6001;
 app.listen(port, () => {

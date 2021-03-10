@@ -10,7 +10,13 @@ router.post("/", async (req, res) => {
   if (error) return res.status(400).send(error);
 
   habit = new Habits(
-    _.pick(req.body, ["habitName", "category", "inputType", "isTracked"])
+    _.pick(req.body, [
+      "habitName",
+      "category",
+      "inputType",
+      "isTracked",
+      "color",
+    ])
   );
 
   let dbResponse = await habit.save();

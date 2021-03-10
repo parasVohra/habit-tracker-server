@@ -18,6 +18,10 @@ const habitSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  color: {
+    type: String,
+    default: "black",
+  },
   habitTrack: [
     {
       date: {
@@ -48,6 +52,7 @@ function validateHabitSchema(habit) {
     category: yup.string().required(),
     inputType: yup.string().required(),
     isTracked: yup.boolean(),
+    color: yup.string(),
     habitTrack: yup.array().of(
       yup.object().shape({
         date: yup.string().required(),

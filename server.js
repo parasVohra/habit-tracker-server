@@ -6,6 +6,8 @@ const db_URI = config.get("mongoURI");
 
 //Routes
 const Habits = require("./routes/Habits");
+const GetHabits = require("./routes/GetHabits");
+const UpdateHabit = require("./routes/UpdateHabit");
 
 //connect with mongodb
 mongoose
@@ -29,6 +31,8 @@ app.use(function (req, res, next) {
 
 //redirect routes to route folder
 app.use("/api/saveHabit", Habits);
+app.use("/api/getHabits", GetHabits);
+app.use("/api/updateHabit", UpdateHabit);
 
 const port = process.env.PORT || 6001;
 app.listen(port, () => {

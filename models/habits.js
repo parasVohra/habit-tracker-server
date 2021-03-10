@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const yup = require("yup");
+const { HabitTrack } = require("./habitTrack");
 
 const habitSchema = new mongoose.Schema({
   habitName: {
@@ -22,26 +23,7 @@ const habitSchema = new mongoose.Schema({
     type: String,
     default: "black",
   },
-  habitTrack: [
-    {
-      date: {
-        type: String,
-        required: true,
-      },
-      day: {
-        type: String,
-        required: true,
-      },
-      isComplete: {
-        type: Boolean,
-        default: false,
-      },
-      data: {
-        type: mongoose.Schema.Types.Mixed,
-        default: null,
-      },
-    },
-  ],
+  habitTrack: [{ type: Object, ref: HabitTrack }],
 });
 
 const Habits = mongoose.model("Habits", habitSchema);
@@ -53,14 +35,6 @@ function validateHabitSchema(habit) {
     inputType: yup.string().required(),
     isTracked: yup.boolean(),
     color: yup.string(),
-    habitTrack: yup.array().of(
-      yup.object().shape({
-        date: yup.string().required(),
-        day: yup.string().required(),
-        isComplete: yup.boolean(),
-        data: yup.mixed(),
-      })
-    ),
   });
 
   return schema.validate(habit);

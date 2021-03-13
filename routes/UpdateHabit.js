@@ -1,16 +1,60 @@
 const express = require("express");
+const { update } = require("lodash");
 const router = express.Router();
 const _ = require("lodash");
 const { Habits, validate } = require("../models/habits");
+var ObjectId = require("mongoose").Types.ObjectId;
+const Options = { upsert: true };
 
 router.post("/", async (req, res) => {
-  //1 find habit with id
+  let habitData = req.body;
+  console.log(habitData);
+  let result = await Habits.findOne({
+    // find if habit Track has current date
+    _id: ObjectId(habitData.id),
+    habitTrack: {
+      $elemMatch: {
+        date: habitData.date,
+      },
+    },
+  });
 
-  // if found then find the date in habit track array
-  // if found date then update the value of isComplete
-  // else push update object to habit Tracker
-
-  res.send(req.body);
+  if (result === null) {
+    // if result is null then push habit Track object to array
+    let result = await Habits.updateOne(
+      {
+        _id: ObjectId(habitData.id),
+      },
+      {
+        $push: {
+          habitTrack: {
+            date: habitData.date,
+            day: habitData.day,
+            isComplete: habitData.isComplete,
+          },
+        },
+      }
+    );
+    res.send(result);
+  } else {
+    // else update the isComplete status
+    let result = await Habits.updateOne(
+      {
+        _id: ObjectId(habitData.id),
+        habitTrack: {
+          $elemMatch: {
+            date: habitData.date,
+          },
+        },
+      },
+      {
+        $set: {
+          "habitTrack.$.isComplete": habitData.isComplete,
+        },
+      }
+    );
+    res.send(result);
+  }
 });
 
 module.exports = router;

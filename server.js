@@ -4,16 +4,17 @@ const mongoose = require("mongoose");
 const config = require("config");
 const db_URI = config.get("mongoURI");
 
-//Routes
+//Routes Paths
 const Habits = require("./routes/Habits");
 const GetHabits = require("./routes/GetHabits");
 const UpdateHabit = require("./routes/UpdateHabit");
+const UpdateIsTracked = require("./routes/UpdateIsTracked");
 
 //connect with mongodb
 mongoose
   .connect(db_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("connected to mongoDb"))
-  .catch(err => console.error(err));
+  .catch((err) => console.error(err));
 mongoose.set("useCreateIndex", true);
 
 //use middleware
@@ -33,6 +34,7 @@ app.use(function (req, res, next) {
 app.use("/api/saveHabit", Habits);
 app.use("/api/getHabits", GetHabits);
 app.use("/api/updateHabit", UpdateHabit);
+app.use("/api/updateIsTracked", UpdateIsTracked);
 
 const port = process.env.PORT || 6001;
 app.listen(port, () => {

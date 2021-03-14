@@ -1,10 +1,8 @@
 const express = require("express");
-const { update } = require("lodash");
 const router = express.Router();
 const _ = require("lodash");
 const { Habits, validate } = require("../models/habits");
 var ObjectId = require("mongoose").Types.ObjectId;
-const Options = { upsert: true };
 
 router.post("/", async (req, res) => {
   let habitData = req.body;

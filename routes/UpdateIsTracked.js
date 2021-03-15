@@ -5,7 +5,13 @@ const { Habits, validate } = require("../models/habits");
 var ObjectId = require("mongoose").Types.ObjectId;
 
 router.post("/", async (req, res) => {
-  res.send(req.body.data);
+  console.log(req.body);
+
+  let result = await Habits.updateOne(
+    { _id: ObjectId(req.body.id) },
+    { $set: { isTracked: req.body.isTracked } }
+  );
+  res.send(result);
 });
 
 module.exports = router;

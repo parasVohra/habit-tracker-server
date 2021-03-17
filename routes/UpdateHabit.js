@@ -29,6 +29,7 @@ router.post("/", async (req, res) => {
             date: habitData.date,
             day: habitData.day,
             isComplete: habitData.isComplete,
+            data: habitData.inputData,
           },
         },
       }
@@ -48,6 +49,7 @@ router.post("/", async (req, res) => {
       {
         $set: {
           "habitTrack.$.isComplete": habitData.isComplete,
+          "habitTrack.$.data": habitData.inputData,
         },
       }
     );

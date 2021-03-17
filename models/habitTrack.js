@@ -15,7 +15,7 @@ const habitTrackSchema = new mongoose.Schema({
     default: false,
   },
   data: {
-    type: mongoose.Schema.Types.Mixed,
+    type: String,
     default: null,
   },
 });

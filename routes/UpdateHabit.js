@@ -5,55 +5,59 @@ const { Habits, validate } = require("../models/habits");
 var ObjectId = require("mongoose").Types.ObjectId;
 
 router.post("/", async (req, res) => {
-  let habitData = req.body;
-  console.log(habitData);
-  let result = await Habits.findOne({
-    // find if habit Track has current date
-    _id: ObjectId(habitData.id),
-    habitTrack: {
-      $elemMatch: {
-        date: habitData.date,
+  try {
+    let habitData = req.body;
+    console.log(habitData);
+    let result = await Habits.findOne({
+      // find if habit Track has current date
+      _id: ObjectId(habitData.id),
+      habitTrack: {
+        $elemMatch: {
+          date: habitData.date,
+        },
       },
-    },
-  });
+    });
 
-  if (result === null) {
-    // if result is null then push habit Track object to array
-    let result = await Habits.updateOne(
-      {
-        _id: ObjectId(habitData.id),
-      },
-      {
-        $push: {
+    if (result === null) {
+      // if result is null then push habit Track object to array
+      let result = await Habits.updateOne(
+        {
+          _id: ObjectId(habitData.id),
+        },
+        {
+          $push: {
+            habitTrack: {
+              date: habitData.date,
+              day: habitData.day,
+              isComplete: habitData.isComplete,
+              data: habitData.inputData,
+            },
+          },
+        }
+      );
+      res.send(result);
+    } else {
+      // else update the isComplete status
+      let result = await Habits.updateOne(
+        {
+          _id: ObjectId(habitData.id),
           habitTrack: {
-            date: habitData.date,
-            day: habitData.day,
-            isComplete: habitData.isComplete,
-            data: habitData.inputData,
+            $elemMatch: {
+              date: habitData.date,
+            },
           },
         },
-      }
-    );
-    res.send(result);
-  } else {
-    // else update the isComplete status
-    let result = await Habits.updateOne(
-      {
-        _id: ObjectId(habitData.id),
-        habitTrack: {
-          $elemMatch: {
-            date: habitData.date,
+        {
+          $set: {
+            "habitTrack.$.isComplete": habitData.isComplete,
+            "habitTrack.$.data": habitData.inputData,
           },
-        },
-      },
-      {
-        $set: {
-          "habitTrack.$.isComplete": habitData.isComplete,
-          "habitTrack.$.data": habitData.inputData,
-        },
-      }
-    );
-    res.send(result);
+        }
+      );
+      res.send(result);
+    }
+  } catch (err) {
+    res.send(error);
   }
 });
 

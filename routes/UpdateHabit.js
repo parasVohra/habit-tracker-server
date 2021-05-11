@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
-const { Habits, validate } = require("../models/habits");
+const { Habits } = require("../models/habits");
 var ObjectId = require("mongoose").Types.ObjectId;
 
 router.post("/", async (req, res) => {
@@ -17,7 +17,6 @@ router.post("/", async (req, res) => {
         },
       },
     });
-
     if (result === null) {
       // if result is null then push habit Track object to array
       let result = await Habits.updateOne(

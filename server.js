@@ -9,10 +9,15 @@ const Habits = require("./routes/Habits");
 const GetHabits = require("./routes/GetHabits");
 const UpdateHabit = require("./routes/UpdateHabit");
 const UpdateIsTracked = require("./routes/UpdateIsTracked");
+const SignUp = require("./routes/SignUp");
+const SignIn = require("./routes/SignIn");
 
 //connect with mongodb
 mongoose
-  .connect(db_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(db_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("connected to mongoDb"))
   .catch((err) => console.error(err));
 mongoose.set("useCreateIndex", true);
@@ -25,7 +30,7 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, x-auth-token"
+    "Origin, X-Requested-With, Content-Type, Accept, x-auth-token, Authorization"
   );
   next();
 });
@@ -35,6 +40,8 @@ app.use("/api/saveHabit", Habits);
 app.use("/api/getHabits", GetHabits);
 app.use("/api/updateHabit", UpdateHabit);
 app.use("/api/updateIsTracked", UpdateIsTracked);
+app.use("/api/signUp", SignUp);
+app.use("/api/signIn", SignIn);
 
 const port = process.env.PORT || 6001;
 app.listen(port, () => {

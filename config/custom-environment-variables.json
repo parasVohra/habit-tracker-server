@@ -1,3 +1,4 @@
 {
-  "mongoURI": "Habit_mongoDB"
+  "mongoURI": "Habit_mongoDB",
+  "jwtPrivateKey": "Habit_jwtPrivateKey"
 }

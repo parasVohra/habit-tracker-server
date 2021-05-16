@@ -2,43 +2,22 @@ const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
 const { Habits } = require("../models/habits");
+const { Users } = require("../models/users");
+const { HabitTrack } = require("../models/habitTrack");
+const auth = require("../middleware/auth");
 var ObjectId = require("mongoose").Types.ObjectId;
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   try {
-    let habitData = req.body;
-    console.log(habitData);
-    let result = await Habits.findOne({
-      // find if habit Track has current date
-      _id: ObjectId(habitData.id),
-      habitTrack: {
+    // first find the user then
+
+    const userId = req.body.user._id;
+    const habitData = req.body;
+    console.log(habitData.id);
+    const user = await Users.findOne({
+      _id: userId,
+      habits: {
         $elemMatch: {
-          date: habitData.date,
-        },
-      },
-    });
-    if (result === null) {
-      // if result is null then push habit Track object to array
-      let result = await Habits.updateOne(
-        {
-          _id: ObjectId(habitData.id),
-        },
-        {
-          $push: {
-            habitTrack: {
-              date: habitData.date,
-              day: habitData.day,
-              isComplete: habitData.isComplete,
-              data: habitData.inputData,
-            },
-          },
-        }
-      );
-      res.send(result);
-    } else {
-      // else update the isComplete status
-      let result = await Habits.updateOne(
-        {
           _id: ObjectId(habitData.id),
           habitTrack: {
             $elemMatch: {
@@ -46,17 +25,76 @@ router.post("/", async (req, res) => {
             },
           },
         },
+      },
+    });
+
+    const habitTrack = new HabitTrack({
+      date: habitData.date,
+      day: habitData.day,
+      isComplete: habitData.isComplete,
+      data: habitData.inputData,
+    });
+
+    if (user === null) {
+      // if result is null then push habit Track object to array
+      const addNewHabitTrack = await Users.findOne(
         {
-          $set: {
-            "habitTrack.$.isComplete": habitData.isComplete,
-            "habitTrack.$.data": habitData.inputData,
+          _id: userId,
+        },
+        {
+          habits: {
+            $elemMatch: {
+              _id: ObjectId(habitData.id),
+            },
           },
         }
       );
-      res.send(result);
+
+      console.log("add  ", addNewHabitTrack);
+
+      const up = await Users.updateOne(
+        {
+          _id: ObjectId(userId),
+          habits: {
+            $elemMatch: {
+              _id: ObjectId(habitData.id),
+            },
+          },
+        },
+        {
+          $push: {
+            "habits.$.habitTrack": habitTrack,
+          },
+        }
+      );
+
+      console.log("up ", up);
+      res.status(201).send(addNewHabitTrack);
+    } else {
+      // else update the isComplete status
+      const updateHabitTrack = await Users.updateOne(
+        {
+          _id: ObjectId(userId),
+        },
+        {
+          $set: {
+            "habits.$[h].habitTrack.$[t].isComplete": habitData.isComplete,
+            "habits.$[h].habitTrack.$[t].data": habitData.inputData,
+          },
+        },
+        {
+          arrayFilters: [
+            { "h._id": ObjectId(habitData.id) },
+            { "t.date": habitData.date },
+          ],
+        }
+      );
+      console.log(updateHabitTrack);
+      res.status(201).send(updateHabitTrack);
     }
   } catch (err) {
-    res.send(error);
+    console.log(err);
+    res.status(400).send(err);
   }
 });
 

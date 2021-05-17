@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { Users, validate } = require("../models/users");
 const _ = require("lodash");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 router.post("/", async (req, res) => {
   try {

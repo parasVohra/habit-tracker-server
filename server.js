@@ -42,6 +42,10 @@ app.use(function (req, res, next) {
 
 app.use(cors());
 
+app.get("/", (req, res) => {
+  res.status(200).send();
+});
+
 //redirect routes to route folder
 app.use("/api/saveHabit", Habits);
 app.use("/api/getHabits", GetHabits);

@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
       // send the token as Response
     }
   } catch (err) {
-    console.log(error);
+    console.log(err);
 
     res
       .header("Content-Type", "application/json")

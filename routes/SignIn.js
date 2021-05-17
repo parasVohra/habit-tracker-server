@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
       }
     }
   } catch (err) {
-    console.log(error);
+    console.log(err);
 
     res
       .header("Content-Type", "application/json")

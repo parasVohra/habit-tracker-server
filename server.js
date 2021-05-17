@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const config = require("config");
 const db_URI = config.get("mongoURI");
+const cors = require("cors");
 
 //Routes Paths
 const Habits = require("./routes/Habits");
@@ -25,7 +26,7 @@ mongoose.set("useCreateIndex", true);
 //use middleware
 app.use(express.json());
 
-//enable CROS
+//enable CORS
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -34,6 +35,8 @@ app.use(function (req, res, next) {
   );
   next();
 });
+
+app.use(cors());
 
 //redirect routes to route folder
 app.use("/api/saveHabit", Habits);

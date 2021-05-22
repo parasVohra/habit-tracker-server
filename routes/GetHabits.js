@@ -5,7 +5,6 @@ const auth = require("../middleware/auth");
 
 router.get("/", auth, async (req, res) => {
   try {
-    console.log(req.body);
     const userId = req.body.user._id;
     const user = await Users.findOne({ _id: userId });
     if (!user) return res.status(400).send("No user found");

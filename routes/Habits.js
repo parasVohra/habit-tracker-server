@@ -11,7 +11,6 @@ router.post("/", auth, async (req, res) => {
     const userId = req.body.user._id;
 
     const user = await Users.findOne({ _id: userId });
-    console.log(user);
     habit = new Habits(
       _.pick(req.body, [
         "habitName",
@@ -34,7 +33,7 @@ router.post("/", auth, async (req, res) => {
         },
       }
     );
-    console.log(hasSameHabit);
+    console.log("Save HAbit ::", hasSameHabit);
 
     if (hasSameHabit) {
       res

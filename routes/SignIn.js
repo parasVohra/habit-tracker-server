@@ -12,7 +12,6 @@ router.post("/", async (req, res) => {
 
     let userFound = await Users.findOne({ email: email });
     //exits then send response error with message
-    console.log(userFound);
     if (!userFound) {
       return res
         .header("content-type", "application/json")
@@ -27,7 +26,6 @@ router.post("/", async (req, res) => {
         req.body.password,
         userFound.password
       );
-      console.log(isValidPassword);
 
       if (!isValidPassword) {
         return res
@@ -45,8 +43,6 @@ router.post("/", async (req, res) => {
       }
     }
   } catch (err) {
-    console.log(err);
-
     res
       .header("Content-Type", "application/json")
       .status(500)

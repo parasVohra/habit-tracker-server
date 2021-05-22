@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
         .header("Content-Type", "application/json")
         .status(401)
         .send({
-          error: `User with email ${email} is already exits. Please use another email or SingIn \uD83D\uDE05 `,
+          error: `User with email "${email}" is already exits. Please use another email or SingIn \uD83D\uDE05 `,
         });
     } else {
       // save the user

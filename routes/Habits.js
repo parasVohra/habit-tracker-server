@@ -35,7 +35,7 @@ router.post("/", auth, async (req, res) => {
     );
     console.log("Save HAbit ::", hasSameHabit);
 
-    if (hasSameHabit) {
+    if (hasSameHabit.habits.length > 0) {
       res
         .header("content-type", "application/json")
         .status(400)

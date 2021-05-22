@@ -19,7 +19,9 @@ router.post("/", async (req, res) => {
       return res
         .header("Content-Type", "application/json")
         .status(401)
-        .send({ error: `user with email ${email} is already exits` });
+        .send({
+          error: `User with email ${email} is already exits. Please use another email or SingIn \uD83D\uDE05 `,
+        });
     } else {
       // save the user
       //take the data from the request and encrypt the password

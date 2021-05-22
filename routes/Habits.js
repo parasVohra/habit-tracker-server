@@ -22,11 +22,36 @@ router.post("/", auth, async (req, res) => {
       ])
     );
 
-    user.habits.push(habit);
+    const hasSameHabit = await Users.findOne(
+      {
+        _id: userId,
+      },
+      {
+        habits: {
+          $elemMatch: {
+            habitName: req.body.habitName,
+          },
+        },
+      }
+    );
+    console.log(hasSameHabit);
 
-    const dbResponse = await user.save();
+    if (hasSameHabit) {
+      res
+        .header("content-type", "application/json")
+        .status(400)
+        .send({
+          error: `Habit named "${req.body.habitName}" is already exits`,
+        });
+    } else {
+      user.habits.push(habit);
 
-    res.send(dbResponse);
+      const dbResponse = await user.save();
+      res
+        .header("content-type", "application/json")
+        .status(200)
+        .send({ msg: `Habit saved  \uD83D\uDC4D` });
+    }
   } catch (err) {
     res.status(500).send(err);
   }

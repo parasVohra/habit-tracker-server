@@ -17,19 +17,25 @@ router.post("/", async (req, res) => {
       return res
         .header("content-type", "application/json")
         .status(401)
-        .send({ error: `user with email ${email} doesn't exits` });
-    } else if (userFound) {
+        .send({
+          error: `User with email "${email}" doesn't exits \uD83D\uDE43   . Please Try again or SignUp \uD83D\uDE07 `,
+        });
+    }
+    if (userFound) {
       // if find user verify the user password
       const isValidPassword = await bcrypt.compare(
         req.body.password,
         userFound.password
       );
+      console.log(isValidPassword);
 
       if (!isValidPassword) {
         return res
           .header(("content-type", "application/json"))
           .status(401)
-          .send({ error: "Invalid password" });
+          .send({
+            error: `Password is incorrect \uD83E\uDD37\u200D\u2642\uFE0F.  Please try again \uD83D\uDE42`,
+          });
       } else {
         const token = userFound.generateAuthToken();
         res

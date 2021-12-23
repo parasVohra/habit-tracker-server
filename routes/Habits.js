@@ -9,6 +9,7 @@ router.post("/", auth, async (req, res) => {
   try {
     // get user from the db
     const userId = req.body.user._id;
+    console.log(req.body);
 
     const user = await Users.findOne({ _id: userId });
     habit = new Habits(
@@ -18,6 +19,9 @@ router.post("/", auth, async (req, res) => {
         "inputType",
         "isTracked",
         "color",
+        "weeklyGoal",
+        "habitUnit",
+        "dailyGoal",
       ])
     );
 

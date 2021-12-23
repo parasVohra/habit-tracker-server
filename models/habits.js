@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const yup = require("yup");
 const { HabitTrack } = require("./habitTrack");
+const { HabitUnit } = require("./habitUnit");
+const { WeeklyGoal } = require("./weeklyGoal");
 
 const habitSchema = new mongoose.Schema({
   habitName: {
@@ -18,6 +20,18 @@ const habitSchema = new mongoose.Schema({
   isTracked: {
     type: Boolean,
     default: false,
+  },
+  dailyGoal: {
+    type: Number,
+    default: 1,
+  },
+  weeklyGoal: {
+    type: Object,
+    ref: WeeklyGoal,
+  },
+  habitUnit: {
+    type: Object,
+    ref: HabitUnit,
   },
   color: {
     type: String,

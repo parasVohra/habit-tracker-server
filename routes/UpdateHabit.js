@@ -31,7 +31,9 @@ router.post("/", auth, async (req, res) => {
     const habitTrack = new HabitTrack({
       date: habitData.date,
       day: habitData.day,
-      isComplete: habitData.isComplete,
+      isFullyComplete: habitData.isFullyComplete,
+      isPartialComplete: habitData.isPartialComplete,
+      done: habitData.done,
       data: habitData.inputData,
     });
 
@@ -78,7 +80,11 @@ router.post("/", auth, async (req, res) => {
         },
         {
           $set: {
-            "habits.$[h].habitTrack.$[t].isComplete": habitData.isComplete,
+            "habits.$[h].habitTrack.$[t].isFullyComplete":
+              habitData.isFullyComplete,
+            "habits.$[h].habitTrack.$[t].isPartialComplete":
+              habitData.isPartialComplete,
+            "habits.$[h].habitTrack.$[t].done": habitData.done,
             "habits.$[h].habitTrack.$[t].data": habitData.inputData,
           },
         },

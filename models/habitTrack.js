@@ -10,9 +10,17 @@ const habitTrackSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  isComplete: {
+  isFullyComplete: {
     type: Boolean,
     default: false,
+  },
+  isPartialComplete: {
+    type: Boolean,
+    default: false,
+  },
+  done: {
+    type: Number,
+    default: 0,
   },
   data: {
     type: String,
@@ -26,7 +34,9 @@ function validateHabitSchema(habit) {
   const schema = yup.object().shape({
     date: yup.string().required(),
     day: yup.string().required(),
-    isComplete: yup.boolean(),
+    isFullyComplete: yup.boolean(),
+    isPartialComplete: yup.boolean(),
+    done: yup.number(),
     data: yup.mixed(),
   });
 

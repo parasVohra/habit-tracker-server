@@ -22,6 +22,7 @@ router.post("/", auth, async (req, res) => {
         "weeklyGoal",
         "habitUnit",
         "dailyGoal",
+        "trackType",
       ])
     );
 

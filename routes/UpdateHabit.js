@@ -9,8 +9,6 @@ var ObjectId = require("mongoose").Types.ObjectId;
 
 router.post("/", auth, async (req, res) => {
   try {
-    // first find the user then
-
     const userId = req.body.user._id;
     const habitData = req.body;
     console.log(habitData.id);
@@ -73,7 +71,6 @@ router.post("/", auth, async (req, res) => {
       console.log("up ", up);
       res.status(201).send(addNewHabitTrack);
     } else {
-      // else update the isComplete status
       const updateHabitTrack = await Users.updateOne(
         {
           _id: ObjectId(userId),

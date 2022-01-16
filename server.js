@@ -6,6 +6,7 @@ const db_URI = config.get("mongoURI");
 const cors = require("cors");
 const https = require("https");
 const fs = require("fs");
+const AuthMiddleware = require("./middleware/auth");
 
 //Routes Paths
 const Habits = require("./routes/Habits");
@@ -14,6 +15,7 @@ const UpdateHabit = require("./routes/UpdateHabit");
 const UpdateIsTracked = require("./routes/UpdateIsTracked");
 const SignUp = require("./routes/SignUp");
 const SignIn = require("./routes/SignIn");
+const UpdateHabitContent = require("./routes/UpdateHabitContent");
 
 //connect with mongodb
 mongoose
@@ -24,9 +26,6 @@ mongoose
   .then(() => console.log("connected to mongoDb"))
   .catch((err) => console.error(err));
 mongoose.set("useCreateIndex", true);
-
-//use middleware
-app.use(express.json());
 
 //enable CORS
 app.use(function (req, res, next) {
@@ -41,8 +40,11 @@ app.use(function (req, res, next) {
   );
   next();
 });
-
 app.use(cors());
+
+//use middleware
+app.use(express.json());
+app.use(AuthMiddleware);
 
 app.get("/", (req, res) => {
   res.status(200).send();
@@ -55,6 +57,7 @@ app.use("/api/updateHabit", UpdateHabit);
 app.use("/api/updateIsTracked", UpdateIsTracked);
 app.use("/api/signUp", SignUp);
 app.use("/api/signIn", SignIn);
+app.use("/api/updateHabitContent", UpdateHabitContent);
 
 if (process.env.NODE_ENV === "production") {
   const options = {

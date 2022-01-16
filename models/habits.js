@@ -37,6 +37,10 @@ const habitSchema = new mongoose.Schema({
     type: String,
     default: "black",
   },
+  trackType: {
+    type: String,
+    default: "Checkbox",
+  },
   habitTrack: [{ type: Object, ref: HabitTrack }],
 });
 
